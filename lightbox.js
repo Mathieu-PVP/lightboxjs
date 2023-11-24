@@ -6,7 +6,7 @@
 
 'use strict';
 
-/** La Class qui généère la LightBox. */
+/** La Class qui génère la LightBox. */
 class LightBox {
     /**
      * Contructeur de la classe
@@ -22,14 +22,14 @@ class LightBox {
      * @return {void}
      */
     _createLightBox() {
-        // Fonction pour fermer la fenêtre
+        // Fonction pour fermer la lightbox
         function closeWindow(target) {
             var _target = target.closest('.lightboxjs');
             _target.remove();
         }
 
         /*** ----------------------------------- ***/
-        /*** Fenêtre ***/
+        /*** Lightbox ***/
         /*** ----------------------------------- ***/
         const _lightbox = document.createElement('div');
         _lightbox.classList.add('lightboxjs');
