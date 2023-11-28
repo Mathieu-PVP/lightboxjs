@@ -6,7 +6,7 @@
 
 'use strict';
 
-/** La Class qui généère la LightBox. */
+/** La Class qui génère la LightBox. */
 class LightBox {
     /**
      * Contructeur de la classe
@@ -178,11 +178,11 @@ class LightBox {
 window.addEventListener('DOMContentLoaded', () => {
     // On applique un style globale aux images pour qu'on sache que la lightbox est activé
     const _global_style = document.createElement('style');
-    _global_style.innerHTML = '.lightbox-js img { cursor: zoom-in; }';
+    _global_style.innerHTML = 'img.lightbox-js { cursor: zoom-in; }';
     document.body.appendChild(_global_style);
 
     // Boucle permettant à toutes les images qui ont la classe "lightbox-js" d'avoir la lightbox quand on clique dessus.
-    const _lightbox__images = document.querySelectorAll('.lightbox-js img');
+    const _lightbox__images = document.querySelectorAll('img.lightbox-js');
     for (let i = 0; i < _lightbox__images.length; i++) {
         _lightbox__images[i].addEventListener('click', (e) => new LightBox(e.currentTarget.src));
     }
