@@ -6,7 +6,7 @@
 
 'use strict';
 
-/** La Class qui génère la LightBox. */
+/** La Class qui généère la LightBox. */
 class LightBox {
     /**
      * Contructeur de la classe
@@ -14,20 +14,14 @@ class LightBox {
      */
     constructor(imageUrl) {
         this.imageUrl = imageUrl;
-        this._createLightBox();
+        this._createLB();
     }
 
     /**
      * Fonction pour générer le contenu et le style de la LightBox
      * @return {void}
      */
-    _createLightBox() {
-        // Fonction pour fermer la lightbox
-        function closeWindow(target) {
-            var _target = target.closest('.lightboxjs');
-            _target.remove();
-        }
-
+    _createLB() {
         /*** ----------------------------------- ***/
         /*** Lightbox ***/
         /*** ----------------------------------- ***/
@@ -65,8 +59,6 @@ class LightBox {
             /*** ----------------------------------- ***/
             .lightboxjs-content {
                 position: relative;
-                background-color: #ffffff !important;
-                box-shadow: 0px 0px 100px -55px #00000070 !important;
                 border-radius: 5px !important;
                 padding: 15px !important;
                 max-width: 85%;
@@ -79,44 +71,41 @@ class LightBox {
                 0% { transform: scale(0.5); }
                 100% { transform: scale(1); }
             }
-            /*** |--> Titre ***/
-            .lightboxjs-title {
-                font-size: 25px;
-                color: #202124;
-                font-weight: 300;
-            }
-            /*** |--> Image ***/
+            /*** Image ***/
             .lightboxjs-img {
+                margin-top: 50px;
                 max-width: 100%;
-                width: 95%;
+                width: 100%;
                 height: 700px;
                 max-height: 85%;
                 object-fit: contain;
+                box-shadow: 0px 0px 100px -55px #00000070;
                 filter: drop-shadow(0px 1px 12px #00000030);
                 background-color: #0e0e0e;
             }
-            /*** |--> Bouton de fermeture ***/
+            /*** Bouton de fermeture ***/
             .lightboxjs-close_button {
                 position: absolute;
                 top: 15px;
                 right: 15px;
-                height: 25px;
-                width: 25px;
+                height: 30px;
+                width: 30px;
                 border: unset;
                 background-color: unset;
                 cursor: pointer;
                 font-weight: 700;
-                background-color: #FF0000;
+                background-color: #0000004d;
                 color: #ffffff;
                 border-radius: 50%;
                 transition: all .1s ease-in-out;
             }
             .lightboxjs-close_button:after { content: "X"; }
             .lightboxjs-close_button:hover { transform: scale(1.1); }
-            /*** |--> Message d'erreur ***/
+            /*** Message d'erreur ***/
             .lightboxjs-error-msg {
                 color: #FF0000;
                 font-size: 14px;
+                font-weight: 900;
             }
             /*** ----------------------------------- ***/
             /*** RESPONSIVE ***/
@@ -126,6 +115,11 @@ class LightBox {
                     min-width: 100%;
                     min-height: 100%;
                 }
+                .lightboxjs-content {
+                    padding: 15px 0px 15px 0px !important;
+                    max-width: 95%;
+                }
+                .lightboxjs-close_button { right: 0; }
             }
         `;
         _lightbox.appendChild(_style);
@@ -134,51 +128,61 @@ class LightBox {
         /*** ----------------------------------- ***/
         const _lightbox__background = document.createElement('div');
         _lightbox__background.classList.add('lightboxjs-background');
-        _lightbox__background.addEventListener('click', (e) => closeWindow(e.target));
+        _lightbox__background.addEventListener('click', (e) => this._closeLB(e.target));
         _lightbox.appendChild(_lightbox__background);
         /*** ----------------------------------- ***/
         /*** Contenu ***/
         /*** ----------------------------------- ***/
         const _lightbox__content = document.createElement('div');
         _lightbox__content.classList.add('lightboxjs-content');
-        /*** |---> Titre ***/
-        const _lightbox__title = document.createElement('h2');
-        _lightbox__title.classList.add('lightboxjs-title');
-        _lightbox__title.innerText = 'Aperçu';
-        _lightbox__content.appendChild(_lightbox__title);
-        /*** |---> Image ***/
+        /*** ----------------------------------- ***/
+        /*** Image ***/
+        /*** ----------------------------------- ***/
         const _lightbox__img = document.createElement('img');
         _lightbox__img.classList.add('lightboxjs-img');
         _lightbox__img.src = this.imageUrl;
         _lightbox__img.addEventListener('error', () => {
             // Si il y a une erreur, on supprime la node img
             _lightbox__img.remove();
-            /*** |---> Message d'erreur ***/
+            /*** ----------------------------------- ***/
+            /*** Message d'erreur ***/
+            /*** ----------------------------------- ***/
             const _lightbox__error_msg = document.createElement('p');
             _lightbox__error_msg.classList.add('lightboxjs-error-msg');
             _lightbox__error_msg.innerText = '⚠ Une erreur est survenue lors du chargement de l\'image.';
             _lightbox__content.appendChild(_lightbox__error_msg);
         });
         _lightbox__content.appendChild(_lightbox__img);
+        /*** ----------------------------------- ***/
         /*** Bouton de fermeture ***/
+        /*** ----------------------------------- ***/
         const _lightbox__close__button = document.createElement('button');
         _lightbox__close__button.classList.add('lightboxjs-close_button');
-        _lightbox__close__button.addEventListener('click', (e) => closeWindow(e.target));
+        _lightbox__close__button.addEventListener('click', (e) => this._closeLB(e.target));
         _lightbox__content.appendChild(_lightbox__close__button);
         /*** ----------------------------------- ***/
         _lightbox.appendChild(_lightbox__content);
         document.body.appendChild(_lightbox);
+    }
+
+    /**
+     * Fonction pour fermer la lightbox
+     * @return {void}
+     */
+    _closeLB(target) {
+        var _target = target.closest('.lightboxjs');
+        _target.remove();
     }
 }
 
 window.addEventListener('DOMContentLoaded', () => {
     // On applique un style globale aux images pour qu'on sache que la lightbox est activé
     const _global_style = document.createElement('style');
-    _global_style.innerHTML = 'img.lightbox-js { cursor: zoom-in; }';
+    _global_style.innerHTML = '.lightbox-js img { cursor: zoom-in; }';
     document.body.appendChild(_global_style);
 
-    // Boucle permettant à toutes les images qui ont la classe "lightbox-js" d'avoir la lightbox.
-    const _lightbox__images = document.querySelectorAll('img.lightbox-js');
+    // Boucle permettant à toutes les images qui ont la classe "lightbox-js" d'avoir la lightbox quand on clique dessus.
+    const _lightbox__images = document.querySelectorAll('.lightbox-js img');
     for (let i = 0; i < _lightbox__images.length; i++) {
         _lightbox__images[i].addEventListener('click', (e) => new LightBox(e.currentTarget.src));
     }
